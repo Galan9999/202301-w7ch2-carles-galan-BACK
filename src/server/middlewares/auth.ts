@@ -33,7 +33,7 @@ const auth = async (req: CustomRequest, res: Response, next: NextFunction) => {
   try {
     const { sub: ownerId } = jwt.verify(
       token!,
-      process.env.JWT_SECRET!
+      process.env.JWT!
     ) as CustomJwtPayload;
 
     req.ownerId = ownerId;
