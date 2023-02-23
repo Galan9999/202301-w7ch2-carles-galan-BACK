@@ -7,6 +7,7 @@ import {
 import { CustomError } from "../../CustomError/CustomError.js";
 import User from "../../database/models/User.js";
 import { type UserCredentials } from "../../types";
+import bcryptjs from "bcrypt";
 
 export const createUser = async (
   req: Request<
@@ -19,14 +20,18 @@ export const createUser = async (
 ) => {
   try {
     const { username, password, email } = req.body;
+    const image = req.file?.filename;
+    const saltLength = 8;
 
-    const user = await User.create({ username, password, email });
+    const hashedPassword = await bcryptjs.hash(password, saltLength);
+
+    const user = await User.create({ username, hashedPassword, email, image });
 
     res.status(201).json({ user });
   } catch (error) {
     const newError = new CustomError(
       error.message,
-      408,
+      409,
       "Coudldn't create user"
     );
 
