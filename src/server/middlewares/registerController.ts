@@ -25,7 +25,12 @@ export const createUser = async (
 
     const hashedPassword = await bcryptjs.hash(password, saltLength);
 
-    const user = await User.create({ username, hashedPassword, email, image });
+    const user = await User.create({
+      username,
+      password: hashedPassword,
+      email,
+      image,
+    });
 
     res.status(201).json({ user });
   } catch (error) {
